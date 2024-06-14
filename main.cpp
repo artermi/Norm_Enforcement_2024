@@ -35,7 +35,7 @@ int main(int argc, char** argv){
 	srand(time(NULL));
 
 
-	for(double r = 3.0; r < 5.01; r += 0.1 ){
+	for(double r = 3.0; r < 5.01; r += 0.5 ){
 		for(double b = 0; b < 1.01; b += 0.1){
 			for (double g = 0.0; g < 1.01; g += 0.1){
 					do_once(r,b,g,0);
