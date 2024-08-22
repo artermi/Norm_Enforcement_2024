@@ -23,7 +23,7 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 		Neighbour[i][3] = (i - 1 + LL) % LL;
 	}//initialise the neighbour
 
-	if(P2 == false){
+	if(P2 == true){
 		for(int i = 0; i < LL; i++){
 			int rdnum = rand() % 4;
 			if(rdnum == 0)
