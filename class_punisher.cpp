@@ -2,7 +2,7 @@
 using namespace std;
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
-	const int l, const int Mod,bool Grid, bool P2 = false){
+	const int l, const int Mod,bool Grid, bool P2){
 	L = l;
 	LL = l * l;
 	r = rate;
