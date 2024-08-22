@@ -35,7 +35,7 @@ int main(int argc, char** argv){
 	srand(time(NULL));
 
 	double r = 2.0;
-	double g = 0.8
+	double g = 0.8;
 
 
 	for(double b = 0; b < 2.51; b += 0.1){
