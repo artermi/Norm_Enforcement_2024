@@ -2,7 +2,7 @@
 using namespace std;
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
-	const int l, const int Mod,bool Grid){
+	const int l, const int Mod,bool Grid, bool P2 = false){
 	L = l;
 	LL = l * l;
 	r = rate;
@@ -23,17 +23,31 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 		Neighbour[i][3] = (i - 1 + LL) % LL;
 	}//initialise the neighbour
 
-	for(int i = 0; i < LL; i++){
-		double rdnum = (double)rand()/(double)RAND_MAX;
-		if(rdnum < .25)
-			Strategy[i] = 0; //D
-		else if (rdnum < .5) //C
-			Strategy[i] = 1;
-		else if (rdnum < .75) //P1
-			Strategy[i] = 2;
-		else
-			Strategy[i] = 3; //P2
+	if(P2 == false){
+		for(int i = 0; i < LL; i++){
+			int rdnum = rand() % 4;
+			if(rdnum == 0)
+				Strategy[i] = 0; //D
+			else if (rdnum == 1) //C
+				Strategy[i] = 1;
+			else if (rdnum == 2) //P1
+				Strategy[i] = 2;
+			else
+				Strategy[i] = 3; //P2
 
+		}
+	}
+	else{
+		for(int i = 0; i < LL; i++){
+			int rdnum = rand() % 3;
+			if(rdnum == 0)
+				Strategy[i] = 0; //D
+			else if (rdnum == 1) //C
+				Strategy[i] = 1;
+			else //P1
+				Strategy[i] = 2;
+
+		}
 	}
 }
 
