@@ -64,7 +64,7 @@ double punPGG::unit_game(const int cent,const int to){
 	if (mod == 1)// reverse mode
 		m = 3-m;
 
-	double fNE = (set_strat[3] > 0) ? 1.0:0.0;
+	double fNO = (set_strat[2] > 0) ? 1.0:0.0;
 	
 	if(old){
 		m = .25;
@@ -74,7 +74,7 @@ double punPGG::unit_game(const int cent,const int to){
 
 
 	if(Strategy[to] == 0)
-		return (old)? Pc + 1 - beta * (fNE + m* set_strat[3]): Pc + 1 - beta * (set_strat[2] + m * set_strat[3]);
+		return (old)? Pc + 1 - beta * (fNO + m* set_strat[3]): Pc + 1 - beta * (set_strat[2] + m * set_strat[3]);
 
 	if(Strategy[to] == 1)
 		return Pc;
