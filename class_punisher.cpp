@@ -2,7 +2,7 @@
 using namespace std;
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
-	const int l, const int Mod,bool Grid, bool P2){
+	const int l, const int Mod,bool Grid, bool Old){
 	L = l;
 	LL = l * l;
 	r = rate;
@@ -10,6 +10,7 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 	gamma = Gamma;
 	mod = Mod;
 	grid = Grid;
+	old = Old;
 	//strcpy(dir_name,"Fixed");
 	Strategy = new int[LL];
 	Neighbour = new int *[LL];
@@ -23,17 +24,17 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 		Neighbour[i][3] = (i - 1 + LL) % LL;
 	}//initialise the neighbour
 
-	if(P2 == true){
+	if(true){
 		for(int i = 0; i < LL; i++){
 			int rdnum = rand() % 4;
 			if(rdnum == 0)
 				Strategy[i] = 0; //D
 			else if (rdnum == 1) //C
 				Strategy[i] = 1;
-			else if (rdnum == 2) //P1
+			else if (rdnum == 2) //P1 or O
 				Strategy[i] = 2;
 			else
-				Strategy[i] = 3; //P2
+				Strategy[i] = 3; //P2 or E
 
 		}
 	}
@@ -63,17 +64,25 @@ double punPGG::unit_game(const int cent,const int to){
 	if (mod == 1)// reverse mode
 		m = 3-m;
 
-	if(Strategy[to] == 1)
-		return (r * set_strat[1] + set_strat[3] + set_strat[2]) / 5.0 - 1.0;
-	if(Strategy[to] == 0)
-		return (r * set_strat[1] + set_strat[3] + set_strat[2]) / 5.0 - 
-				beta * (set_strat[2] + m * set_strat[3]);
-	if(Strategy[to] == 2)
-		return  (r * set_strat[1] + set_strat[3] + set_strat[2]) / 5.0 - 1.0 - 
-				gamma * set_strat[0];
+	double fNE = (set_strat[3] > 0) ? 1.0:0.0;
+	
+	if(old){
+		m = .25;
+	}
 
-	return (r * set_strat[1] + set_strat[3] + set_strat[2]) / 5.0 - 1.0 - 
-				m * gamma * set_strat[0];
+	double Pc = (r * set_strat[1] + set_strat[3] + set_strat[2]) / 5.0 - 1.0;
+
+
+	if(Strategy[to] == 0)
+		return (old)? Pc + 1 - beta * (fNE + m* set_strat[3]): Pc + 1 - beta * (set_strat[2] + m * set_strat[3]);
+
+	if(Strategy[to] == 1)
+		return Pc;
+
+	if(Strategy[to] == 2) //P1 or O
+		return  (old) ? Pc - gamma : Pc - gamma * set_strat[0];
+
+	return Pc - m * gamma * set_strat[0]; //P2 or E
 }
 
 double punPGG::centre_game(const int cent){

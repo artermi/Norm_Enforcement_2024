@@ -20,6 +20,7 @@ public:
 	int LL;
 	int mod;
 	double grid;
+	bool old;
 	//char dir_name[100];
 
 	int* Strategy; // 0 for Defactor, 1 for Cooperator, 2 for Punisher
@@ -30,7 +31,7 @@ public:
 	//long long curr[LL];
 
 	punPGG(const double rate, const double Beta, const double Gamma,
-		const int l, const int Mod, bool Grid = false, bool P2 = true);
+		const int l, const int Mod, bool Grid = false, bool old = false);
 	double unit_game(const int cent,const int to);
 	double centre_game(const int cent);
 	int game(bool ptf,int rnd, int GAP);
