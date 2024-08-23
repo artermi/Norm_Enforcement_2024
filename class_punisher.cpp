@@ -70,7 +70,7 @@ double punPGG::unit_game(const int cent,const int to){
 		m = .25;
 	}
 
-	double Pc = (r * set_strat[1] + set_strat[3] + set_strat[2]) / 5.0 - 1.0;
+	double Pc = r * ( set_strat[1] + set_strat[2] + set_strat[3]) / 5.0 - 1.0;
 
 
 	if(Strategy[to] == 0)
