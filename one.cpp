@@ -24,9 +24,9 @@ int do_once(double r, double b, double g, int mod){
 	file = fopen(file_n, "w");
 	fclose(file);
 
+
 	punPGG gameOBJ(r,b,g,600,mod,true);
 	gameOBJ.game(true,10000,100);
-
 	return 0;
 }
 
