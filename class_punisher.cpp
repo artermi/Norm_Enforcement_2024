@@ -70,11 +70,14 @@ double punPGG::unit_game(const int cent,const int to){
 		m = .25;
 	}
 
-	double Pc = r * ( set_strat[1] + set_strat[2] + set_strat[3]) / 5.0 - 1.0;
+	double Pc = r * ( set_strat[1] + set_strat[2] + set_strat[3] + 1) / 5.0 - 1.0;
 
 
 	if(Strategy[to] == 0)
-		return (old)? Pc + 1 - beta * (fNO + m* set_strat[3]): Pc + 1 - beta * (set_strat[2] + m * set_strat[3]);
+		return (old)? 
+		r * ( set_strat[1] + set_strat[2] + set_strat[3]) / 5.0
+		- beta * (fNO + m * set_strat[3])
+		: Pc + 1 - beta * (set_strat[2] + m * set_strat[3]);
 
 	if(Strategy[to] == 1)
 		return Pc;
