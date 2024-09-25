@@ -66,8 +66,8 @@ double punPGG::unit_game(const int cent,const int to){
 
 	double fNO = (set_strat[2] > 0) ? 1.0:0.0;
 	
-	if(old){
-		m = .25;
+	if(true){
+		m = 1;
 	}
 
 	double Pc = r * ( set_strat[1] + set_strat[2] + set_strat[3] + 1) / 5.0 - 1.0;

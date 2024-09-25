@@ -24,7 +24,7 @@ int do_once(double r, double b, double g, int mod){
 	file = fopen(file_n, "w");
 	fclose(file);
 
-	punPGG gameOBJ(r,b,g,600,mod,false,false);
+	punPGG gameOBJ(r,b,g,200,mod,false,false);
 	gameOBJ.game(true,20000,100);
 
 	return 0;
@@ -35,7 +35,7 @@ int main(int argc, char** argv){
 	srand(time(NULL));
 
 	double r = 2.0;
-	double g = 0.5;
+	double g = 0.8;
 
 
 	for(double b = 0.5; b < 2.51; b += 0.1){
