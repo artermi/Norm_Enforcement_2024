@@ -31,7 +31,8 @@ public:
 	//long long curr[LL];
 
 	punPGG(const double rate, const double Beta, const double Gamma,
-		const int l, const int Mod, bool Grid = false, bool old = false);
+		const int l, const int Mod, bool Grid = false, bool old = false,
+		bool prep = false, bool high_P = false);
 	double unit_game(const int cent,const int to);
 	double centre_game(const int cent);
 	int game(bool ptf,int rnd, int GAP);

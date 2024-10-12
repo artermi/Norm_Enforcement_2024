@@ -2,7 +2,7 @@
 using namespace std;
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
-	const int l, const int Mod,bool Grid, bool Old){
+	const int l, const int Mod,bool Grid, bool Old,bool prep,bool high_P){
 	L = l;
 	LL = l * l;
 	r = rate;
@@ -14,6 +14,7 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 	//strcpy(dir_name,"Fixed");
 	Strategy = new int[LL];
 	Neighbour = new int *[LL];
+
 	for(int i = 0; i < LL; i++)
 		Neighbour[i] = new int[4];
 
@@ -25,17 +26,44 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 	}//initialise the neighbour
 
 	if(true){
-		for(int i = 0; i < LL; i++){
-			int rdnum = rand() % 4;
-			if(rdnum == 0)
-				Strategy[i] = 0; //D
-			else if (rdnum == 1) //C
-				Strategy[i] = 1;
-			else if (rdnum == 2) //P1 or O
-				Strategy[i] = 2;
-			else
-				Strategy[i] = 3; //P2 or E
 
+		if (prep){
+			for(int i = 0; i<LL; i++){
+				Strategy[i] = 0;
+				int dimX = ( i % L >= L/2 )? 1:0;
+				int dimY =  (i/L >= L/2)? 2:0;
+				Strategy[i] += dimY + dimX; 
+			}
+
+		}
+		else{
+			for(int i = 0; i < LL; i++){
+				int rdnum = rand() % 4;
+				if(rdnum == 0)
+					Strategy[i] = 0; //D
+				else if (rdnum == 1) //C
+					Strategy[i] = 1;
+				else if (rdnum == 2) //P1 or O
+					Strategy[i] = 2;
+				else
+					Strategy[i] = 3; //P2 or E
+
+			}
+			if(high_P){
+			for(int i = 0; i < LL; i++){
+					int rdnum = rand() % 10;
+				if(rdnum < 5)
+					Strategy[i] = 0; //D
+				else if (rdnum < 8) //C
+					Strategy[i] = 1;
+				else if (rdnum  < 9) //P1 or O
+					Strategy[i] = 2;
+				else
+					Strategy[i] = 3; //P2 or E
+
+			}
+
+			}
 		}
 	}
 	else{
@@ -66,17 +94,16 @@ double punPGG::unit_game(const int cent,const int to){
 
 	double fNO = (set_strat[2] > 0) ? 1.0:0.0;
 	
-	if(true){
+	if(old){
 		m = 1;
 	}
 
-	double Pc = r * ( set_strat[1] + set_strat[2] + set_strat[3] + 1) / 5.0 - 1.0;
+	double Pc = r * (set_strat[1] + set_strat[2] + set_strat[3]) / 5.0 - 1.0;
 
 
 	if(Strategy[to] == 0)
 		return (old)? 
-		r * ( set_strat[1] + set_strat[2] + set_strat[3]) / 5.0
-		- beta * (fNO + m * set_strat[3])
+		Pc + 1 - beta * (fNO + m * set_strat[3])
 		: Pc + 1 - beta * (set_strat[2] + m * set_strat[3]);
 
 	if(Strategy[to] == 1)
