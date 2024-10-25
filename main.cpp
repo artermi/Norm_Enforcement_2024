@@ -45,7 +45,7 @@ int main(int argc, char** argv){
 					do_once(r,b,g,0);
 			}
 		}
-//	}
+	}
 
 
 	return 0;
