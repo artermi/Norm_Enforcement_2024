@@ -24,6 +24,7 @@ int do_once(double r, double b, double g, int mod){
 	file = fopen(file_n, "w");
 	fclose(file);
 
+	//                            Grid, old, prep, high_D
 	punPGG gameOBJ(r,b,g,1000,mod,false,true,true,false);
 	gameOBJ.game(true,20000,100);
 
