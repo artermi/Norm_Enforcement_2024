@@ -88,7 +88,7 @@ double punPGG::unit_game(const int cent,const int to){
 	for(int i = 0; i < 4; i++)
 		set_strat[Strategy[Neighbour[cent][i]]] += 1.0;
 
-	double m = (set_strat[1] * 2 >= 5) ? 2.0:1.0;
+	double m = (set_strat[0] * 2 >= 5) ? 1.0:2.0;
 	if (mod == 1)// reverse mode
 		m = 3-m;
 
