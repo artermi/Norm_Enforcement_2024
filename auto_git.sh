@@ -11,6 +11,11 @@ echo $SEC
 sleep $SEC
 
 #some command we need to do
+cd ..
+python3 cat_final.py 1108New_m1 > mod_2.dat 
+python3 cat_final.py 1108New_m0 > mod_1.dat 
+git add mod_2.dat
+git add mod_1.dat
 
 #commit message
 commitmessage="Auto commit: $(date)"
