@@ -12,7 +12,6 @@ int do_once(double r, double b, double g, int mod){
 			);
 
 	FILE *file;
-	
   	file = fopen(file_n, "r");
 
 	if (file) {
