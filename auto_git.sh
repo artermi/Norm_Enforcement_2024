@@ -6,7 +6,7 @@ echo "Hello $MY_NAME - hope you're well."
 echo "How long (in hour) do you want the program to sleep?"
 read hr
 
-SEC=$(echo "scale=2; $hr*3600" | bc)
+SEC=$($hr*3600)
 echo $SEC
 sleep $SEC
 
