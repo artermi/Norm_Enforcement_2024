@@ -3,8 +3,8 @@ MY_NAME="Colin"
 echo "Hello $MY_NAME - hope you're well."
 
 #Waiting time
-echo "How long (in hour) do you want the program to sleep?"
-read hr
+#echo "How long (in hour) do you want the program to sleep?"
+hr=1
 
 SEC=$(($hr*3600))
 echo $SEC
