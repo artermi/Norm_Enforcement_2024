@@ -12,10 +12,10 @@ sleep $SEC
 
 #some command we need to do
 cd ..
-python3 cat_final.py 1108New_m1 > mod_2.dat 
-python3 cat_final.py 1108New_m0 > mod_1.dat 
-git add mod_2.dat
-git add mod_1.dat
+python3 cat_final.py 1118_m0_patent > mod_0_patent.dat 
+python3 cat_final.py 1118_m1_patent > mod_1_patent.dat 
+git add mod_0_patent.dat
+git add mod_1_patent.dat
 
 #commit message
 commitmessage="Auto commit: $(date)"
