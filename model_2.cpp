@@ -25,8 +25,8 @@ int do_once(double r, double b, double g, int mod){
 	fclose(file);
 
 	//1024: Make it for old
-	//                           Grid, old, prep, high_D
-	punPGG gameOBJ(r,b,g,600,mod,false,false,false,false);
+	//                           Grid, old, prep, high_D,patent
+	punPGG gameOBJ(r,b,g,600,mod,false,false,false,false,true);
 	gameOBJ.game(true,10000,100);
 
 	return 0;
