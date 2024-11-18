@@ -25,9 +25,9 @@ int do_once(double r, double b, double g, int mod){
 	fclose(file);
 
 
-	punPGG gameOBJ(r,b,g,600,mod,true,true,false,true);
+	punPGG gameOBJ(r,b,g,600,mod,true,true,false,false,true);
 	//                           grid,old,prep,high
-	gameOBJ.game(true,10000,10);
+	gameOBJ.game(true,100,10);
 	return 0;
 }
 

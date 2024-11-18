@@ -2,7 +2,8 @@
 using namespace std;
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
-	const int l, const int Mod,bool Grid, bool Old,bool prep,bool high_P){
+	const int l, const int Mod,bool Grid, bool Old,bool prep,bool high_P,
+	bool pattern){
 	L = l;
 	LL = l * l;
 	r = rate;
@@ -25,59 +26,61 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 		Neighbour[i][3] = (i - 1 + LL) % LL;
 	}//initialise the neighbour
 
-	if(true){
 
-		if (prep){
-			for(int i = 0; i<LL; i++){
-				Strategy[i] = 0;
-				int dimX = ( i % L >= L/2 )? 1:0;
-				int dimY =  (i/L >= L/2)? 2:0;
-				Strategy[i] += dimY + dimX; 
-			}
 
+	if (prep){
+		for(int i = 0; i<LL; i++){
+			Strategy[i] = 0;
+			int dimX = ( i % L >= L/2 )? 1:0;
+			int dimY =  (i/L >= L/2)? 2:0;
+			Strategy[i] += dimY + dimX; 
 		}
-		else{
-			for(int i = 0; i < LL; i++){
-				int rdnum = rand() % 4;
-				if(rdnum == 0)
-					Strategy[i] = 0; //D
-				else if (rdnum == 1) //C
-					Strategy[i] = 1;
-				else if (rdnum == 2) //P1 or O
-					Strategy[i] = 2;
-				else
-					Strategy[i] = 3; //P2 or E
 
-			}
-			if(high_P){
-			for(int i = 0; i < LL; i++){
-					int rdnum = rand() % 10;
-				if(rdnum < 5)
-					Strategy[i] = 0; //D
-				else if (rdnum < 8) //C
-					Strategy[i] = 1;
-				else if (rdnum  < 9) //P1 or O
-					Strategy[i] = 2;
-				else
-					Strategy[i] = 3; //P2 or E
-
-			}
-
-			}
+	}
+	else if(pattern){
+		int pt_L = 20;
+		int Pattern_Table[pt_L*pt_L];
+		for(int i=0; i <pt_L*pt_L;i++){
+			Pattern_Table[i] = rand()%4;
 		}
+		int b_s = L/pt_L; //block size
+		for(int i=0;i<LL;i++)
+			Strategy[i] = Pattern_Table[ i%L /b_s + (i/L)/(b_s)*pt_L];
+		//i/L is the row num, i%L is column num;
+		//
+
+
 	}
 	else{
 		for(int i = 0; i < LL; i++){
-			int rdnum = rand() % 3;
+			int rdnum = rand() % 4;
 			if(rdnum == 0)
 				Strategy[i] = 0; //D
 			else if (rdnum == 1) //C
 				Strategy[i] = 1;
-			else //P1
+			else if (rdnum == 2) //P1 or O
 				Strategy[i] = 2;
+			else
+				Strategy[i] = 3; //P2 or E
+
+		}
+		if(high_P){
+		for(int i = 0; i < LL; i++){
+				int rdnum = rand() % 10;
+			if(rdnum < 5)
+				Strategy[i] = 0; //D
+			else if (rdnum < 8) //C
+				Strategy[i] = 1;
+			else if (rdnum  < 9) //P1 or O
+				Strategy[i] = 2;
+			else
+				Strategy[i] = 3; //P2 or E
+
+		}
 
 		}
 	}
+	
 }
 
 double punPGG::unit_game(const int cent,const int to){
