@@ -25,9 +25,19 @@ int do_once(double r, double b, double g, int mod){
 	fclose(file);
 
 
-	punPGG gameOBJ(r,b,g,400,mod,true,true,false,false,true);
+	punPGG gameOBJ0(r,b,g,400,mod,true,true,false,false,true);
+	punPGG gameOBJ1(r,b+0.1,g,400,mod,true,true,false,false,true);
+	punPGG gameOBJ2(r,b-0.1,g,400,mod,true,true,false,false,true);
+	punPGG gameOBJ3(r,b,g+0.1,400,mod,true,true,false,false,true);
+	punPGG gameOBJ4(r,b,g-0.1,400,mod,true,true,false,false,true);
+
 	//                           grid,old, prep, high ,patched 
-	gameOBJ.game(true,2001,250);
+	gameOBJ0.game(true,2001,250);
+	gameOBJ1.game(true,2001,250);
+	gameOBJ2.game(true,2001,250);
+	gameOBJ3.game(true,2001,250);
+	gameOBJ4.game(true,2001,250);
+
 	return 0;
 }
 
@@ -39,7 +49,7 @@ int main(int argc, char** argv){
 	double g = .8;
 	int mode = 1;
 
-	bool Israndom = false;
+	bool Israndom = true;
 if(Israndom){ 
 	do_once(2.5,.5,.4, mode);
 	do_once(3,.4,.4, mode);
