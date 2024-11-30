@@ -2,7 +2,7 @@
 #include <unistd.h>
 using namespace std;
 
-int do_once(double r, double b, double g, int mod){
+int do_once(double r, double b, double g, int mod, bool isRandom){
 	printf("Now doing punisher with (r,beta,gamma,mod) = (%f,%f,%f,%d)\n",
 		r,b,g,mod);
 	char file_n[100];
@@ -24,12 +24,14 @@ int do_once(double r, double b, double g, int mod){
 	file = fopen(file_n, "w");
 	fclose(file);
 
+	bool pat = not isRandom;
 
-	punPGG gameOBJ0(r,b,g,400,mod,true,true,false,false,true);
-	punPGG gameOBJ1(r,b+0.1,g,400,mod,true,true,false,false,true);
-	punPGG gameOBJ2(r,b-0.1,g,400,mod,true,true,false,false,true);
-	punPGG gameOBJ3(r,b,g+0.1,400,mod,true,true,false,false,true);
-	punPGG gameOBJ4(r,b,g-0.1,400,mod,true,true,false,false,true);
+
+	punPGG gameOBJ0(r,b,g,600,mod,true,true,false,false,pat);
+	punPGG gameOBJ1(r,b+0.1,g,600,mod,true,true,false,false,pat);
+	punPGG gameOBJ2(r,b-0.1,g,600,mod,true,true,false,false,pat);
+	punPGG gameOBJ3(r,b,g+0.1,600,mod,true,true,false,false,pat);
+	punPGG gameOBJ4(r,b,g-0.1,600,mod,true,true,false,false,pat);
 
 	//                           grid,old, prep, high ,patched 
 	gameOBJ0.game(true,2001,250);
@@ -51,20 +53,20 @@ int main(int argc, char** argv){
 
 	bool Israndom = true;
 if(Israndom){ 
-	do_once(2.5,.5,.4, mode);
-	do_once(3,.4,.4, mode);
-	do_once(3.5,.4,.5, mode);
-	do_once(4,.4,.6, mode);
-	do_once(4.5,.4,.7, mode);
-	do_once(5,.3,.7, mode);
+	do_once(2.5,.5,.4, mode,Israndom);
+	do_once(3,.4,.4, mode,Israndom);
+	do_once(3.5,.4,.5, mode,Israndom);
+	do_once(4,.4,.6, mode,Israndom);
+	do_once(4.5,.4,.7, mode,Israndom);
+	do_once(5,.3,.7, mode,Israndom);
 }
 else{
-	do_once(2.5,.6,.5, mode);
-	do_once(3,.5,.5, mode);
-	do_once(3.5,.2,.3, mode);
-	do_once(4,.3,.5, mode);
-	do_once(4.5,.3,.6, mode);
-	do_once(5,.2,.6, mode);
+	do_once(2.5,.6,.5, mode,Israndom);
+	do_once(3,.5,.5, mode,Israndom);
+	do_once(3.5,.2,.3, mode,Israndom);
+	do_once(4,.3,.5, mode,Israndom);
+	do_once(4.5,.3,.6, mode,Israndom);
+	do_once(5,.2,.6, mode,Israndom);
 
 }
 
