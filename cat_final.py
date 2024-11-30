@@ -11,9 +11,9 @@ d_name = sys.argv[1]
 for root,dirs,files in sorted(os.walk(d_name,topdown = False)):
 
 	for name in sorted(files):
-		if name.find('.dat') >= 0:
-			# A_0100_b_0200_l_0100_m_0100_d_0100_r_0100.dat
-            # r_0470_b_0030_G_0090_mod_00.dat
+		if name.find('.dat') >= 0 and not ( name.find('_i_') >= 0):
+			# A_0100_B_0200_C_0100_D_0100_E_0100_F_0100.dat
+            # r_0300_b_0050_g_0080_mod_00.dat
 			# 0123456789|123456789|123456789|123456789|
 			a = float(name[ 2: 6])/100
 			b = float(name[ 9:13])/100
