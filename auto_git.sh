@@ -6,9 +6,9 @@ echo "Hello $MY_NAME - hope you're well."
 #echo "How long (in hour) do you want the program to sleep?"
 hr=18
 
-SEC=$(($hr*3600))
-echo $SEC
-sleep $SEC
+#SEC=$(($hr*3600))
+#echo $SEC
+#sleep $SEC
 
 #some command we need to do
 #cd ..
