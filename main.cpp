@@ -26,7 +26,7 @@ int do_once(double r, double b, double g, int mod){
 
 	//1024: Make it for old
 	//                           Grid, old, prep, high_D,patent
-	punPGG gameOBJ(r,b,g,600,mod,true,false,false,false,true);
+	punPGG gameOBJ(r,b,g,600,mod,true,false,false,false,false);
 	gameOBJ.game(true,2000,100);
 
 	return 0;
