@@ -25,8 +25,8 @@ int do_once(double r, double b, double g, int mod){
 	fclose(file);
 
 
-	punPGG gameOBJ(r,b,g,600,mod,true,true,false,true);
-	//                           grid,old,prep,high
+	punPGG gameOBJ(r,b,g,600,mod,true,true,false,false,true);
+	//                           grid,old, prep, high ,patched 
 	gameOBJ.game(true,10000,10);
 	return 0;
 }
