@@ -3,7 +3,7 @@ using namespace std;
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
 	const int l, const int Mod,bool Grid, bool Old,bool prep,bool high_P,
-	bool pattern){
+	bool pattern, bool Mutate, bool Strip){
 	L = l;
 	LL = l * l;
 	r = rate;
@@ -12,6 +12,8 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 	mod = Mod;
 	grid = Grid;
 	old = Old;
+	mutate = Mutate;
+	strip = Strip;
 	//strcpy(dir_name,"Fixed");
 	Strategy = new int[LL];
 	Neighbour = new int *[LL];
@@ -51,18 +53,18 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 
 
 	}
+	else if(strip){
+		for (int i = 0; i < LL; ++i)
+		{
+			//P1 (2) -> D (0) -> P2 (3) -> C (1)
+			int order_map[4] = {2,0,3,1};
+			Strategy[(i + 25*L) % LL] = order_map[(i / L) / (L/4)];
+		}
+	}
 	else{
 		for(int i = 0; i < LL; i++){
 			int rdnum = rand() % 4;
-			if(rdnum == 0)
-				Strategy[i] = 0; //D
-			else if (rdnum == 1) //C
-				Strategy[i] = 1;
-			else if (rdnum == 2) //P1 or O
-				Strategy[i] = 2;
-			else
-				Strategy[i] = 3; //P2 or E
-
+			Strategy[i] = rdnum;
 		}
 		if(high_P){
 		for(int i = 0; i < LL; i++){
@@ -148,7 +150,7 @@ int punPGG::game(bool ptf,int rnd, int GAP){
 	double previous[5][4];
 
 	bool stop_all_0 = true;
-
+	bool b4_first_stop = true;
 
 	for(int i = 0; i < rnd + 1; i++){
 		bool stop_all = true;
@@ -186,10 +188,8 @@ int punPGG::game(bool ptf,int rnd, int GAP){
 			if(rate[j] - 0.00000001 >= 0 && rate[j] + 0.00000001 <= 1)
 				stop_all = false;
 
-		if(stop_all || stop_all_0)
-			continue;
 
-		if(grid && i % GAP == 0){
+		if(grid && i % GAP == 0 && b4_first_stop){
 			char path2[100];
 
 			sprintf(path2,"r_%04d_b_%04d_g_%04d_mod_%02d_i_%05d.dat",
@@ -197,16 +197,29 @@ int punPGG::game(bool ptf,int rnd, int GAP){
 				(int)((gamma + 0.000001) *100), mod,i
 				);
 
-			FILE *gfile = fopen(path2,"a+");
+			FILE *gfile = fopen(path2,"w+");
 			for(int j = 0; j < LL; j++){
 				fprintf(gfile, "%d", Strategy[j]);
 			}
 			fclose(gfile);
+			if(stop_all || stop_all_0)
+				b4_first_stop = false;
 		}
+
+		if(stop_all || stop_all_0)
+			continue;
 
 		for(int j = 0; j < LL; j++){
 			int x = rand() % LL;
 			int y = Neighbour[x][rand() % 4 ];
+
+			if (mutate){
+				if( rand() % 1000000 == 0){
+					total[Strategy[x]] --;
+					Strategy[x] = rand() % 4;
+					total[Strategy[x]] ++;
+				}
+			}
 			if (Strategy[x] == Strategy[y])
 				continue;
 //			cout << x << ',' << y <<endl;

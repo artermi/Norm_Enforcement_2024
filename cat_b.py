@@ -65,8 +65,8 @@ ax.set_position([box.x0, box.y0 + box.height * 0.2,
 #ax.plot(itr, L, color='#cb4335', marker= '.', label = 'Fixed defector')
 ax.plot(b, D, color='red', marker= '.',label = 'D',markersize=2)
 ax.plot(b, C, color='blue', marker= '.',label = 'C',markersize=2)
-ax.plot(b, SC, color='green', marker= '.',label = r'$P_o$',markersize=2)
-ax.plot(b, SC2, color='magenta', marker= '.',label = r'$P_E$',markersize=2)
+ax.plot(b, SC, color='green', marker= '.',label = r'$P_1$',markersize=2)
+ax.plot(b, SC2, color='magenta', marker= '.',label = r'$P_2$',markersize=2)
 
 #ax.plot(b, PS, color='magenta', marker= '.',label = 'Average',markersize=2)
 

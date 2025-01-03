@@ -21,6 +21,8 @@ public:
 	int mod;
 	double grid;
 	bool old;
+	bool mutate;
+	bool strip;
 	//char dir_name[100];
 
 	int* Strategy; // 0 for Defactor, 1 for Cooperator, 2 for Punisher
@@ -32,7 +34,8 @@ public:
 
 	punPGG(const double rate, const double Beta, const double Gamma,
 		const int l, const int Mod, bool Grid = false, bool old = false,
-		bool prep = false, bool high_P = false, bool pattern = false);
+		bool prep = false, bool high_P = false, bool pattern = false,
+		bool Mutate = false, bool Strip=false);
 	double unit_game(const int cent,const int to);
 	double centre_game(const int cent);
 	int game(bool ptf,int rnd, int GAP);
