@@ -3,6 +3,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import defaultdict
+from scipy.ndimage import gaussian_filter1d
 from matplotlib import rc
 
 D = []
@@ -63,6 +64,12 @@ box = ax.get_position()
 ax.set_position([box.x0, box.y0 + box.height * 0.2,
                  box.width, box.height * 0.8])
 #ax.plot(itr, L, color='#cb4335', marker= '.', label = 'Fixed defector')
+
+#D = gaussian_filter1d(D,.5)
+#C = gaussian_filter1d(C,.5)
+#SC = gaussian_filter1d(SC,.5)
+#SC2 = gaussian_filter1d(SC2,.5)
+
 ax.plot(b, D, color='red', marker= '.',label = 'D',markersize=2)
 ax.plot(b, C, color='blue', marker= '.',label = 'C',markersize=2)
 ax.plot(b, SC, color='green', marker= '.',label = r'$P_1$',markersize=2)

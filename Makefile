@@ -27,18 +27,20 @@ T3_rand:
 	$(CXX) $(CXXFLAGS) class_punisher.cpp T3_rand_0205.cpp $(FLAGS_T3_rand) -o t3rand0205
 #0205 use T3 rand
 
+
+#This shit is for the bigger thing requested [0210]
 FLAGS_rand_1200 = -DBIGGRID
 FLAGS_patch_1200 = -DBIGGRID -DPATENT
 FLAGS_mute_1200 = -DBIGGRID -DMUTATE
 
 
 T1_1200: $(addprefix 0210t1_, rand_1200 patch_1200 mute_1200)
-
+#Just follow the add prefix, it will do the following shits. [0210]
 
 0103t1_%: $(SRC)
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
 
-0210t1_%: $(SRC)
+0210t1_%: $(SRC) #[0210] Same shit in the same day
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
 
 0103t2_%: $(SRC)
