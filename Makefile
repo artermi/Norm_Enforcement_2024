@@ -5,6 +5,7 @@ SRC = main_narrow.cpp class_punisher.cpp
 
 # Output directories
 OUT_DIR = 1214_Four
+OUT_DIR2 = 0210_T1big
 FINAL_DIR = 1214_T1T2_Final
 
 # Flags
@@ -36,12 +37,18 @@ FLAGS_mute_1200 = -DBIGGRID -DMUTATE
 
 T1_1200: $(addprefix 0210t1_, rand_1200 patch_1200 mute_1200)
 #Just follow the add prefix, it will do the following shits. [0210]
+0210t1_%: $(SRC) #[0210] Same shit in the same day
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
+
+T1_600_rep: $(addprefix 0217t1_, rand_1200 patch_1200 mute_1200)
+#Just follow the add prefix, it will do the following shits. [0210]
+0217t1_%: $(SRC) #[0210] Same shit in the same day
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
+
 
 0103t1_%: $(SRC)
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
 
-0210t1_%: $(SRC) #[0210] Same shit in the same day
-	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
 
 0103t2_%: $(SRC)
 	$(CXX) $(CXXFLAGS) $^ $(FLAGS_$*) -o $@
@@ -67,9 +74,19 @@ generate_pics:
 		) \
 	)
 
+gen_pics_big:
+	@echo "Generate_pics..."
+	mkdir -p $(FINAL_DIR)
+	$(foreach dir, T1_1200_rand  T1_1200_patch T1_1200_mutate  T2_1200_rand  T2_1200_patch T2_1200_mutate, \
+		$(foreach mode, M1 M2, \
+			python3 cat_b.py $(OUT_DIR2)/$(dir)/$(mode) $(FINAL_DIR)/0210_$(subst _,,$(dir))_$(mode).tex ; \
+		) \
+	)
+#1210 Ok, I replicate a new one
+
 clean:
 	@echo "Cleaning up..."
-	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t*
+	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0217t*
 
 clean2:
 	@echo "Cleaning up..."

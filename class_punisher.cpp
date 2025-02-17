@@ -3,13 +3,14 @@ using namespace std;
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
 	const int l, const int Mod,bool Grid, bool Old,bool prep,bool high_P,
-	bool pattern, bool Mutate, bool Strip){
+	bool pattern, bool Mutate, bool Strip, int repeat){
 	L = l;
 	LL = l * l;
 	r = rate;
 	beta = Beta;
 	gamma = Gamma;
 	mod = Mod;
+	Repeat = repeat;
 	grid = Grid;
 	old = Old;
 	mutate = Mutate;
@@ -129,8 +130,15 @@ double punPGG::centre_game(const int cent){
 	return profit;
 }
 
-
 int punPGG::game(bool ptf,int rnd, int GAP){
+	for (int i = 0; i < Repeat; ++i){
+		game_inside(ptf,rnd,GAP);
+	}
+	return 0;
+}
+
+
+int punPGG::game_inside(bool ptf,int rnd, int GAP){
 	FILE *file;
 	if(ptf){
 		char path[100];
@@ -151,17 +159,19 @@ int punPGG::game(bool ptf,int rnd, int GAP){
 
 	bool stop_all_0 = true;
 	bool b4_first_stop = true;
+	int RND = (rnd/GAP) * GAP; //make sure rnd is GAP's multiplier
 
-	for(int i = 0; i < rnd + 1; i++){
+	for(int i = 0; i < RND + 1; i++){
 		bool stop_all = true;
 		if(i % GAP == 0){
 
 			for (int j = 0; j < 4; j++)
 				rate[j] = double (total[j]/double(LL));
-			if(ptf)
+			if(ptf && (Repeat == 1 || (Repeat > 1 && i == RND)) ){
+				//Add a new request for the repeat case: on print the last one.
 				fprintf(file, "%06d %.3f %3f %3f %3f\n",i,rate[0],rate[1],rate[2],rate[3]);
-			printf("%d %.3f %3f %3f %3f\n",i,rate[0],rate[1],rate[2],rate[3]);
-
+				printf("%d %.3f %3f %3f %3f\n",i,rate[0],rate[1],rate[2],rate[3]);
+			}
 			double pert = 0.002;
 			for(int j = 1; j < 5; j++)
 				for(int k = 0; k < 4; k ++)

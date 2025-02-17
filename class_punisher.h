@@ -19,6 +19,7 @@ public:
 	int L;
 	int LL;
 	int mod;
+	int Repeat;
 	double grid;
 	bool old;
 	bool mutate;
@@ -35,8 +36,9 @@ public:
 	punPGG(const double rate, const double Beta, const double Gamma,
 		const int l, const int Mod, bool Grid = false, bool old = false,
 		bool prep = false, bool high_P = false, bool pattern = false,
-		bool Mutate = false, bool Strip=false);
+		bool Mutate = false, bool Strip=false, int repeat = 1);
 	double unit_game(const int cent,const int to);
 	double centre_game(const int cent);
 	int game(bool ptf,int rnd, int GAP);
+	int game_inside(bool ptf,int rnd, int GAP);
 };
