@@ -40,7 +40,11 @@ T1_1200: $(addprefix 0210t1_, rand_1200 patch_1200 mute_1200)
 0210t1_%: $(SRC) #[0210] Same shit in the same day
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
 
-T1_600_rep: $(addprefix 0217t1_, rand_1200 patch_1200 mute_1200)
+FLAGS_rand_600 = -DBIGGRID
+FLAGS_patch_600 = -DBIGGRID -DPATENT
+FLAGS_mute_600 = -DBIGGRID -DMUTATE
+
+T1_600_rep: $(addprefix 0217t1_, rand_600 patch_600 mute_600)
 #Just follow the add prefix, it will do the following shits. [0210]
 0217t1_%: $(SRC) #[0210] Same shit in the same day
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@

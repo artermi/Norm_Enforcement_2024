@@ -1,9 +1,12 @@
 #include "class_punisher.h"
 using namespace std;
 
+
+
+
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
-	const int l, const int Mod,bool Grid, bool Old,bool prep,bool high_P,
-	bool pattern, bool Mutate, bool Strip, int repeat){
+	const int l, const int Mod,bool Grid, bool Old,bool Prep,bool High_P,
+	bool Pattern, bool Mutate, bool Strip, int repeat){
 	L = l;
 	LL = l * l;
 	r = rate;
@@ -15,6 +18,11 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 	old = Old;
 	mutate = Mutate;
 	strip = Strip;
+	//Add the pattern state into the initial value;
+	prep = Prep;
+	pattern = Pattern;
+	high_P = High_P;
+
 	//strcpy(dir_name,"Fixed");
 	Strategy = new int[LL];
 	Neighbour = new int *[LL];
@@ -29,8 +37,11 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 		Neighbour[i][3] = (i - 1 + LL) % LL;
 	}//initialise the neighbour
 
+//	initialise();
 
+}
 
+void punPGG::initialise(){
 	if (prep){
 		for(int i = 0; i<LL; i++){
 			Strategy[i] = 0;
@@ -83,7 +94,7 @@ punPGG::punPGG(const double rate, const double Beta, const double Gamma,
 
 		}
 	}
-	
+
 }
 
 double punPGG::unit_game(const int cent,const int to){
@@ -132,6 +143,7 @@ double punPGG::centre_game(const int cent){
 
 int punPGG::game(bool ptf,int rnd, int GAP){
 	for (int i = 0; i < Repeat; ++i){
+		initialise();
 		game_inside(ptf,rnd,GAP);
 	}
 	return 0;

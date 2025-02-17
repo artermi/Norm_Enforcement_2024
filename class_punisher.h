@@ -26,6 +26,10 @@ public:
 	bool strip;
 	//char dir_name[100];
 
+	bool prep;
+	bool pattern;
+	bool high_P;
+
 	int* Strategy; // 0 for Defactor, 1 for Cooperator, 2 for Punisher
 	int** Neighbour;
 	//int MST_N[LL];
@@ -35,8 +39,9 @@ public:
 
 	punPGG(const double rate, const double Beta, const double Gamma,
 		const int l, const int Mod, bool Grid = false, bool old = false,
-		bool prep = false, bool high_P = false, bool pattern = false,
+		bool Prep = false, bool High_P = false, bool Pattern = false,
 		bool Mutate = false, bool Strip=false, int repeat = 1);
+	void initialise();
 	double unit_game(const int cent,const int to);
 	double centre_game(const int cent);
 	int game(bool ptf,int rnd, int GAP);
