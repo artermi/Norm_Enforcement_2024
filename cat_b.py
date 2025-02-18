@@ -46,10 +46,10 @@ for root,dirs,files in sorted(os.walk(d_name,topdown = False)):
 
 
 			b.append(bb)
-			D.append( sum(Final_D[-3:])/3 )
-			C.append( sum(Final_C[-3:])/3 )
-			SC.append( sum(FinalSC[-3:])/3 ) 
-			SC2.append( sum(FinalSC2[-3:])/3 ) 
+			D.append( sum(Final_D[-10:])/10 )
+			C.append( sum(Final_C[-10:])/10 )
+			SC.append( sum(FinalSC[-10:])/10 ) 
+			SC2.append( sum(FinalSC2[-10:])/10 ) 
 
 		if name.find('.dat') >= 0 and name.find('avg') > 0:
 			with open(os.path.join(root, name)) as file:
