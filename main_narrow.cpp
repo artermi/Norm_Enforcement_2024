@@ -33,7 +33,7 @@ int do_once(double r, double b, double g, int mod){
 	Patent = true;
 	Mutate = true;
 	int grid_size = 600;
-	int repeat = 10;
+	int repeat = 100;
 
 #ifndef GRID
 	Grid = false;
@@ -67,7 +67,7 @@ int do_once(double r, double b, double g, int mod){
 	punPGG gameOBJ(r,b,g,grid_size,mod,Grid, Old, Prep, High_D,Patent,Mutate,false,repeat);
 	printf("grid_size:%d, Grid:%d, Old:%d, Prep:%d, High_D:%d, Patent:%d,Mutate:%d\n",
 		grid_size, Grid,Old,Prep,High_D,Patent,Mutate);
-	gameOBJ.game(true,20000,100);
+	gameOBJ.game(true,60000,100);
 
 	return 0;
 }

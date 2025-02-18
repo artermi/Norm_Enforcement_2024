@@ -49,6 +49,11 @@ T1_600_rep: $(addprefix 0217t1_, rand_600 patch_600 mute_600)
 0217t1_%: $(SRC) #[0210] Same shit in the same day
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
 
+#0218 smaller but longer
+T1_200_rep: $(addprefix 0218t1_, rand_200 patch_200 mute_200)
+0218t1_%: $(SRC) #[0210] Same shit in the same day
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
+
 
 0103t1_%: $(SRC)
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
@@ -88,9 +93,20 @@ gen_pics_big:
 	)
 #1210 Ok, I replicate a new one
 
+#0218, this is for the repeating one
+gen_pics_rep:
+	@echo "Generate_pics..."
+	mkdir -p $(FINAL_DIR)
+	$(foreach dir, 0217t1_muta_rep600  0217t1_patc_rep600 0217t1_rand_rep600, \
+		$(foreach mode, M1 M2, \
+			python3 cat_b.py $(dir)/$(mode) $(FINAL_DIR)/$(subst _,,$(dir))_$(mode)_rep.tex ; \
+		) \
+	)
+
+
 clean:
 	@echo "Cleaning up..."
-	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0217t*
+	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0218t*
 
 clean2:
 	@echo "Cleaning up..."
