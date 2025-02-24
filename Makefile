@@ -124,7 +124,7 @@ gen_pics_rep200:
 
 clean:
 	@echo "Cleaning up..."
-	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0218t*
+	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0218t* 0224t1*
 
 clean2:
 	@echo "Cleaning up..."
