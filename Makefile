@@ -47,9 +47,7 @@ T1_1200_rep: $(addprefix 0224t1_, rand_1200 patch_1200 mute_1200)
 #Command for this one would be:
 #mkdir 0224_1200_rep
 #mkdir 0224_1200_rep/T1_1200_rand  0224_1200_rep/T1_1200_patch 0224_1200_rep/T1_1200_mutate
-#mkdir 0224_1200_rep/T1_1200_rand/T1 0224_1200_rep/T1_1200_rand/T2
-#mkdir 0224_1200_rep/T1_1200_patch/T1 0224_1200_rep/T1_1200_patch/T2
-#mkdir 0224_1200_rep/T1_1200_mutate/T1 0224_1200_rep/T1_1200_mutate/T2 
+#mkdir 0224_1200_rep/T1_1200_rand/M1 0224_1200_rep/T1_1200_rand/M2 & mkdir 0224_1200_rep/T1_1200_patch/M1 0224_1200_rep/T1_1200_patch/M2 &mkdir 0224_1200_rep/T1_1200_mutate/M1 0224_1200_rep/T1_1200_mutate/M2 
 # ./../../0224t1_rand_1200 & (sleep 1 && ./../../0224t1_rand_1200) & (sleep 2 && ./../../0224t1_rand_1200) & (sleep 3 && ./../../0224t1_rand_1200)
 # ./../../0224t1_patch_1200 & (sleep 1 && ./../../0224t1_patch_1200) & (sleep 2 && ./../../0224t1_patch_1200) & (sleep 3 && ./../../0224t1_patch_1200)
 # ./../../0224t1_mute_1200 & (sleep 1 && ./../../0224t1_mute_1200) & (sleep 2 && ./../../0224t1_mute_1200) & (sleep 3 && ./../../0224t1_mute_1200)
@@ -88,6 +86,15 @@ move:
 		) \
 	)
 
+move2:
+	@echo "Moving..."
+
+	$(foreach dir, T1_1200_rand T1_1200_patch T1_1200_mutate, \
+		mv 0224_1200_rep/$(dir)/*mod_00.dat 0224_1200_rep/$(dir)/M1 ; \
+		mv 0224_1200_rep/$(dir)/*mod_01.dat 0224_1200_rep/$(dir)/M2 ; \
+	)
+
+
 
 generate_pics:
 	@echo "Generate_pics..."
@@ -118,6 +125,18 @@ gen_pics_rep200:
 	$(foreach dir, T1_200_rand  T1_200_patch T1_200_mutate, \
 		$(foreach mode, M1 M2, \
 			python3 cat_b.py $(OUT_DIR3)/$(dir)/$(mode) $(FINAL_DIR)/$(subst _,,$(dir))_$(mode)_rep.tex ; \
+		) \
+	)
+
+
+#0218, this is for the repeating one
+OUT_DIR4 = 0224_1200_rep
+gen_pics_rep200:
+	@echo "Generate_pics..."
+	mkdir -p $(FINAL_DIR)
+	$(foreach dir, T1_1200_rand  T1_1200_patch T1_1200_mutate, \
+		$(foreach mode, M1 M2, \
+			python3 cat_b.py $(OUT_DIR4)/$(dir)/$(mode) $(FINAL_DIR)/$(subst _,,$(dir))_$(mode)_rep.tex ; \
 		) \
 	)
 
