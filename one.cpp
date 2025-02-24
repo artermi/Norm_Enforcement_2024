@@ -25,18 +25,18 @@ int do_once(double r, double b, double g, int mod){
 	fclose(file);
 
 
-	punPGG gameOBJ(r,b,g,600,mod,true,true,false,false,true);
+	punPGG gameOBJ(r,b,g,200,mod,true,false,false,false,true);
 	//                           grid,old, prep, high ,patched 
-	gameOBJ.game(true,10000,10);
+	gameOBJ.game(true,40000,400);
 	return 0;
 }
 
 
 int main(int argc, char** argv){
 	srand(time(NULL));
-	double r = 2;
-	double b = 2.2;
-	double g = .8;
+	double r = 2.5;
+	double b = .47;
+	double g = .4;
 
 	do_once(r,b,g,0);
 

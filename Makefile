@@ -40,6 +40,21 @@ T1_1200: $(addprefix 0210t1_, rand_1200 patch_1200 mute_1200)
 0210t1_%: $(SRC) #[0210] Same shit in the same day
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
 
+T1_1200_rep: $(addprefix 0224t1_, rand_1200 patch_1200 mute_1200)
+#Just follow the add prefix, it will do the following shits. [024]
+0224t1_%: $(SRC) #[0224]
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
+#Command for this one would be:
+#mkdir 0224_1200_rep
+#mkdir 0224_1200_rep/T1_1200_rand  0224_1200_rep/T1_1200_patch 0224_1200_rep/T1_1200_mutate
+#mkdir 0224_1200_rep/T1_1200_rand/T1 0224_1200_rep/T1_1200_rand/T2
+#mkdir 0224_1200_rep/T1_1200_patch/T1 0224_1200_rep/T1_1200_patch/T2
+#mkdir 0224_1200_rep/T1_1200_mutate/T1 0224_1200_rep/T1_1200_mutate/T2 
+# ./../../0224t1_rand_1200 & (sleep 1 && ./../../0224t1_rand_1200) & (sleep 2 && ./../../0224t1_rand_1200) & (sleep 3 && ./../../0224t1_rand_1200)
+# ./../../0224t1_patch_1200 & (sleep 1 && ./../../0224t1_patch_1200) & (sleep 2 && ./../../0224t1_patch_1200) & (sleep 3 && ./../../0224t1_patch_1200)
+# ./../../0224t1_mute_1200 & (sleep 1 && ./../../0224t1_mute_1200) & (sleep 2 && ./../../0224t1_mute_1200) & (sleep 3 && ./../../0224t1_mute_1200)
+
+
 FLAGS_rand_600 = -DBIGGRID
 FLAGS_patch_600 = -DBIGGRID -DPATENT
 FLAGS_mute_600 = -DBIGGRID -DMUTATE
@@ -93,13 +108,16 @@ gen_pics_big:
 	)
 #1210 Ok, I replicate a new one
 
+
+
 #0218, this is for the repeating one
-gen_pics_rep:
+OUT_DIR3 = 0218_T1
+gen_pics_rep200:
 	@echo "Generate_pics..."
 	mkdir -p $(FINAL_DIR)
-	$(foreach dir, 0217t1_muta_rep600  0217t1_patc_rep600 0217t1_rand_rep600, \
+	$(foreach dir, T1_200_rand  T1_200_patch T1_200_mutate, \
 		$(foreach mode, M1 M2, \
-			python3 cat_b.py $(dir)/$(mode) $(FINAL_DIR)/$(subst _,,$(dir))_$(mode)_rep.tex ; \
+			python3 cat_b.py $(OUT_DIR3)/$(dir)/$(mode) $(FINAL_DIR)/$(subst _,,$(dir))_$(mode)_rep.tex ; \
 		) \
 	)
 
