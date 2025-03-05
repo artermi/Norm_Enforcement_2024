@@ -131,7 +131,7 @@ gen_pics_rep200:
 
 #0218, this is for the repeating one
 OUT_DIR4 = 0224_1200_rep
-gen_pics_rep200:
+gen_pics_rep1200:
 	@echo "Generate_pics..."
 	mkdir -p $(FINAL_DIR)
 	$(foreach dir, T1_1200_rand  T1_1200_patch T1_1200_mutate, \

@@ -67,7 +67,7 @@ int do_once(double r, double b, double g, int mod){
 	punPGG gameOBJ(r,b,g,grid_size,mod,Grid, Old, Prep, High_D,Patent,Mutate,false,repeat);
 	printf("grid_size:%d, Grid:%d, Old:%d, Prep:%d, High_D:%d, Patent:%d,Mutate:%d\n",
 		grid_size, Grid,Old,Prep,High_D,Patent,Mutate);
-	gameOBJ.game(true,40000,100);
+	gameOBJ.game(true,40 * 1000,100);
 
 	return 0;
 }
@@ -85,11 +85,17 @@ int main(int argc, char** argv){
 	double g = 0.3;
 #endif
 
+/*
+20250305: No need to do M0
+
 	for(double b = 0.4; b < .601; b += 0.01){
 		do_once(r,b,g,0);
 	}
+*/
 
-	for(double b = 0.4; b < .601; b += 0.01){
+//Modify b to [0.5-0.6]
+
+	for(double b = 0.5; b < .601; b += 0.01){
 		do_once(r,b,g,1);
 	}
 
