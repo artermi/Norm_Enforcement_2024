@@ -2,7 +2,7 @@
 using namespace std;
 
 
-
+//Perhaps I should use threading to implement the thing.
 
 punPGG::punPGG(const double rate, const double Beta, const double Gamma, 
 	const int l, const int Mod,bool Grid, bool Old,bool Prep,bool High_P,
@@ -181,6 +181,7 @@ int punPGG::game_inside(bool ptf,int rnd, int GAP){
 				rate[j] = double (total[j]/double(LL));
 			if(ptf && (Repeat == 1 || (Repeat > 1 && i == RND)) ){
 				//Add a new request for the repeat case: on print the last one.
+				//If threading, I need to have a mutex here?
 				fprintf(file, "%06d %.3f %3f %3f %3f\n",i,rate[0],rate[1],rate[2],rate[3]);
 				printf("%d %.3f %3f %3f %3f\n",i,rate[0],rate[1],rate[2],rate[3]);
 			}
