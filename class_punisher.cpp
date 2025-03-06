@@ -91,6 +91,50 @@ void punPGG::initialize_game_state(double total[]) {
         total[Strategy[j]] += 1.0;
 }
 
+double punPGG::unit_game(const int cent,const int to){
+
+	double set_strat[4] = {0.0,0.0,0.0, 0.0}; 
+	//0 Nd, 1 Nc, 2 Np1 3 Np2; Only neighbours
+	set_strat[Strategy[cent]] += 1.0;
+	for(int i = 0; i < 4; i++)
+		set_strat[Strategy[Neighbour[cent][i]]] += 1.0;
+
+	double m = (set_strat[0] * 2 >= 5) ? 1.0:2.0;
+	if (mod == 1)// reverse mode
+		m = 3-m;
+
+	double fNO = (set_strat[2] > 0) ? 1.0:0.0;
+	
+	if(old){
+		m = 1;
+	}
+
+	double Pc = r * (set_strat[1] + set_strat[2] + set_strat[3]) / 5.0 -1.0;
+
+
+	if(Strategy[to] == 0)
+		return (old)? 
+		Pc + 1 - beta * (fNO + m * set_strat[3])
+		: Pc + 1 - beta * (set_strat[2] + m * set_strat[3]);
+
+	if(Strategy[to] == 1)
+		return Pc;
+
+	if(Strategy[to] == 2) //P1 or O
+		return  (old) ? Pc - gamma : Pc - gamma * set_strat[0];
+
+	return Pc - m * gamma * set_strat[0]; //P2 or E
+}
+
+double punPGG::centre_game(const int cent){
+	double profit = unit_game(cent,cent);
+	for(int i = 0; i < 4; i++){
+		profit += unit_game(Neighbour[cent][i],cent);
+	}
+
+	return profit;
+}
+
 void punPGG::update_strategy(double total[]) {
     for (int j = 0; j < LL; j++) {
         int x = rand() % LL;
