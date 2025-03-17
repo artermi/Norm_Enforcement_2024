@@ -257,9 +257,11 @@ int punPGG::game(bool ptf, int rnd, int GAP) {
             local_game.game_inside(ptf, rnd, GAP);
         }
     };
+//    printf("%d\n",num_threads);
 
-    for (int i = 0; i < num_threads; i++)
-        threads.emplace_back(game_thread, Repeat / num_threads);
+    for (int i = 0; i < Repeat; i++){
+        threads.emplace_back(game_thread, 1);
+    }
 
     for (auto& t : threads) t.join();
 
