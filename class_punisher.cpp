@@ -191,8 +191,12 @@ bool punPGG::check_stopping_condition(double rate[], double previous[5][4], int 
 void punPGG::write_to_file(FILE* file, int i, double rate[]) {
     lock_guard<mutex> lock(file_mutex);
     fprintf(file, "%06d %.3f %.3f %.3f %.3f\n", i, rate[0], rate[1], rate[2], rate[3]);
-    printf("%d %.3f %.3f %.3f %.3f\n", i, rate[0], rate[1], rate[2], rate[3]);
 }
+
+void punPGG::print_to_screen(int i, double rate[]){
+	printf("%d %.3f %.3f %.3f %.3f\n", i, rate[0], rate[1], rate[2], rate[3]);
+}
+
 
 FILE* punPGG::open_game_file(bool ptf) {
     if (!ptf) return nullptr;
@@ -227,8 +231,12 @@ int punPGG::game_inside(bool ptf, int rnd, int GAP) {
             for (int j = 0; j < 4; j++)
                 rate[j] = total[j] / double(LL);
 
-            if (ptf && (Repeat == 1 || (Repeat > 1 && i == rnd))) {
-                write_to_file(file, i, rate);
+            if (ptf && i % GAP == 0) {
+            	#ifdef DEBUG
+            	print_to_screen(i,rate);
+            	#endif
+            	if(Repeat == 1 || (Repeat > 1 && i == rnd))
+	                write_to_file(file, i, rate);
             }
 
             if (check_stopping_condition(rate, previous, i, rnd))

@@ -62,6 +62,7 @@ public:
 private:
     FILE* open_game_file(bool ptf);
     void write_to_file(FILE* file, int i, double rate[]);
+    void print_to_screen(int i, double rate[]);
     void initialize_game_state(double total[]);
     void update_strategy(double total[]);
     bool check_stopping_condition(double rate[], double previous[5][4], int i, int rnd);
