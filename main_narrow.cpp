@@ -93,10 +93,10 @@ int main(int argc, char** argv){
 	}
 */
 
-//Modify b to [0.5-0.6]
+//Modify b to [0.45-0.6] for M0
 
-	for(double b = 0.5; b < .601; b += 0.01){
-		do_once(r,b,g,1);
+	for(double b = 0.45; b < .601; b += 0.01){
+		do_once(r,b,g,0);
 	}
 
 

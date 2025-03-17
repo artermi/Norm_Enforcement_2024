@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -O2
+CXXFLAGS = -O2 -pthread
 SRC = main_narrow.cpp class_punisher.cpp
 
 # Output directories
@@ -51,6 +51,13 @@ T1_1200_rep: $(addprefix 0224t1_, rand_1200 patch_1200 mute_1200)
 # ./../../0224t1_rand_1200 & (sleep 1 && ./../../0224t1_rand_1200) & (sleep 2 && ./../../0224t1_rand_1200) & (sleep 3 && ./../../0224t1_rand_1200)
 # ./../../0224t1_patch_1200 & (sleep 1 && ./../../0224t1_patch_1200) & (sleep 2 && ./../../0224t1_patch_1200) & (sleep 3 && ./../../0224t1_patch_1200)
 # ./../../0224t1_mute_1200 & (sleep 1 && ./../../0224t1_mute_1200) & (sleep 2 && ./../../0224t1_mute_1200) & (sleep 3 && ./../../0224t1_mute_1200)
+
+
+T1_1200_0317: $(addprefix 0317t1_,  patch_1200)
+#Just follow the add prefix, it will do the following shits. With threading
+0317t1_%: $(SRC) #[0224]
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
+
 
 
 FLAGS_rand_600 = -DBIGGRID
@@ -143,7 +150,7 @@ gen_pics_rep1200:
 
 clean:
 	@echo "Cleaning up..."
-	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0218t* 0224t1*
+	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0218t* 0224t1* 0317t1_*
 
 clean2:
 	@echo "Cleaning up..."
