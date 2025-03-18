@@ -90,14 +90,12 @@ ax = plt.subplot(111)
 box = ax.get_position()
 ax.set_position([box.x0, box.y0, box.width, box.height * 0.8])
 
-ax.errorbar(b, D, yerr=D_err, fmt='.-', color='red', markersize=2, capsize=3)
-ax.errorbar(b, C, yerr=C_err, fmt='.-', color='blue', markersize=2, capsize=3)
-ax.errorbar(b, SC, yerr=SC_err, fmt='.-', color='green', markersize=2, capsize=3)
-ax.errorbar(b, SC2, yerr=SC2_err, fmt='.-', color='magenta', markersize=2, capsize=3)
+ax.errorbar(b, D, yerr=D_err, fmt='.-', color='red', markersize=2, capsize=3, label='D')
+ax.errorbar(b, C, yerr=C_err, fmt='.-', color='blue', markersize=2, capsize=3, label='C')
+ax.errorbar(b, SC, yerr=SC_err, fmt='.-', color='green', markersize=2, capsize=3, label='P1')
+ax.errorbar(b, SC2, yerr=SC2_err, fmt='.-', color='magenta', markersize=2, capsize=3, label='P2')
 
-# Explicitly setting legend labels here to avoid tikzplotlib issues
-ax.legend(['D', 'C', r'$P_1$', r'$P_2$'], loc='upper center', bbox_to_anchor=(0.5, -0.1),
-          fancybox=True, shadow=True, ncol=4)
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=4)
 
 ax.set_ylim([-0.1, 1.1])
 ax.set_xlabel(r'$\beta$')
@@ -105,3 +103,49 @@ ax.set_ylabel('Fractions')
 
 plt.grid(False)
 tikzplotlib.save(t_name)
+
+
+import re
+
+with open(t_name, 'r') as file:
+    tex_content = file.read()
+
+# Completely remove automatically generated legend entries
+tex_content = re.sub(r'\\addlegendentry\{.*?\}', '', tex_content)
+
+# Custom legend string defined safely (use raw strings)
+custom_legend = r"""
+% Manually add invisible dummy points to create correct legend
+\addplot [semithick, red, mark=*, mark size=1, mark options={solid}]
+table {%
+-1 -1 
+};
+\addlegendentry{D}
+\addplot [semithick, blue, mark=*, mark size=1, mark options={solid}]
+table {%
+-1 -1
+};
+\addlegendentry{C}
+\addplot [semithick, green, mark=*, mark size=1, mark options={solid}]
+table {%
+-1 -1 
+};
+\addlegendentry{$P_1$}
+\addplot [semithick, magenta, mark=*, mark size=1, mark options={solid}]
+table {%
+-1 -1
+};
+\addlegendentry{$P_2$}
+"""
+
+# Safely insert custom legend points immediately after "\begin{axis}[...]"
+tex_content = re.sub(
+    r'(\\begin{axis}\[.*?\])',
+    lambda match: match.group(1) + custom_legend,
+    tex_content,
+    flags=re.DOTALL
+)
+
+# Save the correctly modified .tex file
+with open(t_name, 'w') as file:
+    file.write(tex_content)
