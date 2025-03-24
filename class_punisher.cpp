@@ -190,7 +190,7 @@ bool punPGG::check_stopping_condition(double rate[], double previous[5][4], int 
 
 void punPGG::write_to_file(int i, double rate[]) {
 
-	FILE* file = open_game_file(ptf);
+	FILE* file = open_game_file(true);
     lock_guard<mutex> lock(file_mutex);
     fprintf(file, "%06d %.3f %.3f %.3f %.3f\n", i, rate[0], rate[1], rate[2], rate[3]);
     fclose(file);
