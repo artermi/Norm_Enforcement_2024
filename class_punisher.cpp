@@ -254,7 +254,7 @@ int punPGG::game_inside(bool ptf, int rnd, int GAP) {
 
 int punPGG::game(bool ptf, int rnd, int GAP) {
     const int MAX_THREADS = 1; // <-- You can change this limit as needed
-    int num_threads = min(thread::hardware_concurrency(), MAX_THREADS);
+    int num_threads = min(static_cast<int>(thread::hardware_concurrency()), MAX_THREADS);
     vector<thread> threads;
 
     int games_per_thread = Repeat / num_threads;
