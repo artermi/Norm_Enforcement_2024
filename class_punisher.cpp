@@ -216,11 +216,13 @@ FILE* punPGG::open_game_file(bool ptf) {
         return nullptr;
     }
 
-    printf("Now file: %s\n", path);
     return file;
 }
 
 int punPGG::game_inside(bool ptf, int rnd, int GAP) {
+	if (ptf){
+		printf("Now working: Need to be print\n");
+	}
     double total[4] = {0.0, 0.0, 0.0, 0.0};
     initialize_game_state(total);
 
@@ -251,8 +253,12 @@ int punPGG::game_inside(bool ptf, int rnd, int GAP) {
 }
 
 int punPGG::game(bool ptf, int rnd, int GAP) {
-    int num_threads = thread::hardware_concurrency();
+    const int MAX_THREADS = 1; // <-- You can change this limit as needed
+    int num_threads = min(thread::hardware_concurrency(), MAX_THREADS);
     vector<thread> threads;
+
+    int games_per_thread = Repeat / num_threads;
+    int extra_games = Repeat % num_threads;
 
     auto game_thread = [this, ptf, rnd, GAP](int games_to_run) {
         for (int i = 0; i < games_to_run; i++) {
@@ -261,10 +267,10 @@ int punPGG::game(bool ptf, int rnd, int GAP) {
             local_game.game_inside(ptf, rnd, GAP);
         }
     };
-//    printf("%d\n",num_threads);
 
-    for (int i = 0; i < Repeat; i++){
-        threads.emplace_back(game_thread, 1);
+    for (int i = 0; i < num_threads; i++) {
+        int games = games_per_thread + (i < extra_games ? 1 : 0); // spread extras
+        threads.emplace_back(game_thread, games);
     }
 
     for (auto& t : threads) t.join();
