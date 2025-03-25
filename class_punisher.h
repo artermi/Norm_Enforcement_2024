@@ -57,7 +57,7 @@ public:
     double unit_game(int cent, int to);
     double centre_game(int cent);
     int game(bool ptf, int rnd, int GAP);
-    int game_inside(bool ptf, int rnd, int GAP);
+    int game_inside(bool ptf, int rnd, int GAP, std::stringstream& buffer);
     
 private:
     FILE* open_game_file(bool ptf);

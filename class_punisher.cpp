@@ -16,13 +16,18 @@ I haven't try running this code. But I shall do it sometimes.
 #include "class_punisher.h"
 using namespace std;
 
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/file.h>
+#include <fcntl.h>
+#include <sstream>
+#include <fstream>
+#include <vector>
 #include <cstdio>
-#include <random>
+#include <cstdlib>
+#include <iomanip>
 
-mutex punPGG::file_mutex;
+//mutex punPGG::file_mutex;
 
 punPGG::punPGG(double rate, double Beta, double Gamma, int l, int Mod, bool Grid, bool Old, bool Prep, bool High_P,
                bool Pattern, bool Mutate, bool Strip, int repeat)
@@ -191,7 +196,7 @@ bool punPGG::check_stopping_condition(double rate[], double previous[5][4], int 
 void punPGG::write_to_file(int i, double rate[]) {
 
 	FILE* file = open_game_file(true);
-    lock_guard<mutex> lock(file_mutex);
+    //lock_guard<mutex> lock(file_mutex);
     fprintf(file, "%06d %.3f %.3f %.3f %.3f\n", i, rate[0], rate[1], rate[2], rate[3]);
     fclose(file);
 }
@@ -209,7 +214,7 @@ FILE* punPGG::open_game_file(bool ptf) {
             (int)((r + 0.000001) * 100), (int)((beta + 0.000001) * 100),
             (int)((gamma + 0.000001) * 100), mod);
 
-    lock_guard<mutex> lock(file_mutex);
+    //lock_guard<mutex> lock(file_mutex);
     FILE* file = fopen(path, "a+");
     if (!file) {
         printf("Failed to open file: %s\n", path);
@@ -219,10 +224,11 @@ FILE* punPGG::open_game_file(bool ptf) {
     return file;
 }
 
-int punPGG::game_inside(bool ptf, int rnd, int GAP) {
-	if (ptf){
-		printf("Now working: Need to be print\n");
-	}
+int punPGG::game_inside(bool ptf, int rnd, int GAP, stringstream& buffer) {
+    if (ptf) {
+        printf("Now working: (%f,%f,%f,%d)\n", r,beta,gamma,mod);
+    }
+
     double total[4] = {0.0, 0.0, 0.0, 0.0};
     initialize_game_state(total);
 
@@ -234,16 +240,36 @@ int punPGG::game_inside(bool ptf, int rnd, int GAP) {
             for (int j = 0; j < 4; j++)
                 rate[j] = total[j] / double(LL);
 
-            if (ptf && i % GAP == 0) {
-            	#ifdef DEBUG
-            	print_to_screen(i,rate);
-            	#endif
-            	if(Repeat == 1 || (Repeat > 1 && i == rnd))
-	                write_to_file(i, rate);
+#ifdef DEBUG
+            print_to_screen(i, rate);
+#endif
+
+            // === Case 1: Final write if Repeat == 1 or i == rnd
+            if (ptf && (Repeat == 1 || (Repeat > 1 && i == rnd))) {
+                buffer << setw(6) << setfill('0') << i << " "
+                       << fixed << setprecision(3)
+                       << rate[0] << " " << rate[1] << " "
+                       << rate[2] << " " << rate[3] << "\n";
+
+#ifdef DEBUG
+                printf("Buffer: %s\n", buffer.str().c_str());
+#endif
             }
 
-            if (check_stopping_condition(rate, previous, i, rnd))
+            // === Case 2: Early stopping condition → still output
+            if (check_stopping_condition(rate, previous, i, rnd)) {
+                if (ptf && Repeat > 1) {
+                    buffer << setw(6) << setfill('0') << i << " "
+                           << fixed << setprecision(3)
+                           << rate[0] << " " << rate[1] << " "
+                           << rate[2] << " " << rate[3] << "\n";
+
+#ifdef DEBUG
+                    printf("Buffer: %s\n", buffer.str().c_str());
+#endif
+                }
                 break;
+            }
         }
 
         update_strategy(total);
@@ -251,29 +277,68 @@ int punPGG::game_inside(bool ptf, int rnd, int GAP) {
 
     return 0;
 }
+    
 
 int punPGG::game(bool ptf, int rnd, int GAP) {
-    const int MAX_THREADS = 1; // <-- You can change this limit as needed
-    int num_threads = min(static_cast<int>(thread::hardware_concurrency()), MAX_THREADS);
-    vector<thread> threads;
+    const int MAX_PROCS = 10;
+    int num_procs = std::min(Repeat, MAX_PROCS);
+    int games_per_proc = Repeat / num_procs;
+    int extra = Repeat % num_procs;
 
-    int games_per_thread = Repeat / num_threads;
-    int extra_games = Repeat % num_threads;
+    std::vector<pid_t> children;
 
-    auto game_thread = [this, ptf, rnd, GAP](int games_to_run) {
-        for (int i = 0; i < games_to_run; i++) {
-            punPGG local_game(*this);
-            local_game.initialise();
-            local_game.game_inside(ptf, rnd, GAP);
+    for (int i = 0; i < num_procs; ++i) {
+        int runs = games_per_proc + (i < extra ? 1 : 0);
+        pid_t pid = fork();
+
+        if (pid == 0) {
+            // --- CHILD PROCESS ---
+            srand(time(NULL) ^ getpid());  // Ensure different seeds per child
+            std::stringstream buffer;
+            for (int j = 0; j < runs; ++j) {
+                punPGG local_game(*this);
+                local_game.initialise();
+                local_game.game_inside(ptf, rnd, GAP, buffer);
+            }
+
+            // --- Write to final file with file lock ---
+            if (ptf) {
+#ifdef DEBUG
+                    printf("Final Buffer: %s\n", buffer.str().c_str());
+#endif  
+                FILE* final_file = open_game_file(true);
+                if (final_file) {
+                    int fd = fileno(final_file);
+                    flock(fd, LOCK_EX); // Acquire lock           
+                    fputs(buffer.str().c_str(), final_file);               
+                    fflush(final_file);
+                    flock(fd, LOCK_UN); // Release lock
+                    fclose(final_file);
+                }
+            }
+
+            _exit(0); // Safely exit child
         }
-    };
+        else if (pid > 0) {
+            children.push_back(pid);
+        }
+        else {
+            perror("fork failed");
+            return 1;
+        }
 
-    for (int i = 0; i < num_threads; i++) {
-        int games = games_per_thread + (i < extra_games ? 1 : 0); // spread extras
-        threads.emplace_back(game_thread, games);
+        // Throttle: wait if too many children
+        while ((int)children.size() >= MAX_PROCS) {
+            int status;
+            wait(&status);
+            children.pop_back();
+        }
     }
 
-    for (auto& t : threads) t.join();
+    // Wait for remaining children
+    for (pid_t pid : children) {
+        waitpid(pid, nullptr, 0);
+    }
 
     return 0;
 }
