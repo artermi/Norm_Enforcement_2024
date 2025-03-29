@@ -57,7 +57,7 @@ T1_1200_0317: $(addprefix 0317t1_,  patch_1200)
 #Just follow the add prefix, it will do the following shits. With threading
 0317t1_%: $(SRC) #[0224]
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
-# ./../../0317t1_patch_1200 & (sleep 1 && ./../../0317t1_patch_1200) & (sleep 2 && ./../../0317t1_patch_1200) & (sleep 3 && ./../../0317t1_patch_1200)
+# ./../../0317t1_rand_1200 & (sleep 1 && ./../../0317t1_rand_1200) & (sleep 2 && ./../../0317t1_rand_1200) & (sleep 3 && ./../../0317t1_rand_1200) & (sleep 4 && ./../../0317t1_rand_1200)
 
 
 
@@ -66,8 +66,15 @@ DEBUG_FORK: $(addprefix 0317t1_,  patch_1200)
 DEBUG_0317t1_%: $(SRC) #[0224]
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT -DDEBUG -DPATENT -o $@
 # ./../../0317t1_patch_1200 & (sleep 1 && ./../../0317t1_patch_1200) & (sleep 2 && ./../../0317t1_patch_1200) & (sleep 3 && ./../../0317t1_patch_1200)
+# New note: if there are two same name, it will follow the latter one.
 
 
+
+T1_1200_0329: $(addprefix 0329t1_,  rand_1200)
+#Just follow the add prefix, it will do the following shits. With threading
+0317t1_%: $(SRC) #[0224]
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
+# ./../../0317t1_patch_1200 & (sleep 1 && ./../../0317t1_patch_1200) & (sleep 2 && ./../../0317t1_patch_1200) & (sleep 3 && ./../../0317t1_patch_1200)
 
 
 
