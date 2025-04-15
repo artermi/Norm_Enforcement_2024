@@ -53,7 +53,7 @@ if len(sys.argv) > 2:
 for root, dirs, files in os.walk(d_name, topdown=True):
     for name in sorted(files):
         if name.endswith('.dat') and 'avg' not in name:
-            bb = float(name.split('_')[3]) / 1000
+            bb = float(name.split('_')[3]) / 100
 
             Final_D, Final_C, FinalSC, FinalSC2 = [], [], [], []
             with open(os.path.join(root, name)) as file:
