@@ -55,7 +55,7 @@ int do_once(double r, double b, double g, int mod){
 #endif
 
 #ifndef BIGGRID
-	grid_size = 200;
+	grid_size = 60;
 #endif
 
 #ifndef REPEAT
@@ -67,7 +67,7 @@ int do_once(double r, double b, double g, int mod){
 	punPGG gameOBJ(r,b,g,grid_size,mod,Grid, Old, Prep, High_D,Patent,Mutate,false,repeat);
 	printf("grid_size:%d, Grid:%d, Old:%d, Prep:%d, High_D:%d, Patent:%d,Mutate:%d\n",
 		grid_size, Grid,Old,Prep,High_D,Patent,Mutate);
-	gameOBJ.game(true, 100 * 1000,100);
+	gameOBJ.game(true, 60 * 1000,100);
 
 	return 0;
 }
@@ -95,10 +95,15 @@ int main(int argc, char** argv){
 
 //Modify b to [0.45-0.6] for M0
 
-	for(double b = 0.54; b < .601; b += 0.01){
+	for(double b = 0.45; b < .601; b += 0.01){
 		do_once(r,b,g,0);
 	}
 
+//Modify b to [0.45-0.6] for M0
+
+	for(double b = 0.45; b < .601; b += 0.01){
+		do_once(r,b,g,1);
+	}
 
 	return 0;
 }

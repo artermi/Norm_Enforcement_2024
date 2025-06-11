@@ -193,11 +193,13 @@ bool punPGG::check_stopping_condition(double rate[], double previous[5][4], int 
 }
 
 
-void punPGG::write_to_file(int i, double rate[]) {
-
-	FILE* file = open_game_file(true);
+void punPGG::write_to_file(int i) {
+	FILE* file = open_game_file(true, i, true);
     //lock_guard<mutex> lock(file_mutex);
-    fprintf(file, "%06d %.3f %.3f %.3f %.3f\n", i, rate[0], rate[1], rate[2], rate[3]);
+    for (int i = 0; i < LL; ++i)
+        {fprintf(file,"%d",Strategy[i]);
+    }
+    
     fclose(file);
 }
 
@@ -206,13 +208,20 @@ void punPGG::print_to_screen(int i, double rate[]){
 }
 
 
-FILE* punPGG::open_game_file(bool ptf) {
+FILE* punPGG::open_game_file(bool ptf, int i = -1, bool snap = false) {
     if (!ptf) return nullptr;
 
     char path[100];
-    sprintf(path, "r_%04d_b_%04d_g_%04d_mod_%02d.dat",
+    if(snap){
+        sprintf(path, "r_%04d_b_%04d_g_%04d_mod_%02d_i_%05d.dat",
             (int)((r + 0.000001) * 100), (int)((beta + 0.000001) * 100),
-            (int)((gamma + 0.000001) * 100), mod);
+            (int)((gamma + 0.000001) * 100), mod,i);
+
+    }
+    else
+        sprintf(path, "r_%04d_b_%04d_g_%04d_mod_%02d.dat",
+                (int)((r + 0.000001) * 100), (int)((beta + 0.000001) * 100),
+                (int)((gamma + 0.000001) * 100), mod);
 
     //lock_guard<mutex> lock(file_mutex);
     FILE* file = fopen(path, "a+");
@@ -250,9 +259,10 @@ int punPGG::game_inside(bool ptf, int rnd, int GAP, stringstream& buffer) {
                        << fixed << setprecision(3)
                        << rate[0] << " " << rate[1] << " "
                        << rate[2] << " " << rate[3] << "\n";
+                print_to_screen(i, rate);
 
-#ifdef DEBUG
-                printf("Buffer: %s\n", buffer.str().c_str());
+#ifdef GRID
+                write_to_file(i);
 #endif
             }
 
@@ -263,9 +273,10 @@ int punPGG::game_inside(bool ptf, int rnd, int GAP, stringstream& buffer) {
                            << fixed << setprecision(3)
                            << rate[0] << " " << rate[1] << " "
                            << rate[2] << " " << rate[3] << "\n";
-
-#ifdef DEBUG
-                    printf("Buffer: %s\n", buffer.str().c_str());
+                    print_to_screen(i, rate);
+#ifdef GRID
+                    write_to_file(i);
+                    //printf("Buffer: %s\n", buffer.str().c_str());
 #endif
                 }
                 break;

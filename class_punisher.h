@@ -60,8 +60,8 @@ public:
     int game_inside(bool ptf, int rnd, int GAP, std::stringstream& buffer);
     
 private:
-    FILE* open_game_file(bool ptf);
-    void write_to_file(int i, double rate[]);
+    FILE* open_game_file(bool ptf, int i, bool snap);
+    void write_to_file(int i);
     void print_to_screen(int i, double rate[]);
     void initialize_game_state(double total[]);
     void update_strategy(double total[]);

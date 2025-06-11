@@ -24,6 +24,14 @@ T1: $(addprefix 0103t1_, rand_200 rand_800 patch_200 patch_800 mute_200 mute_800
 
 T2: $(addprefix 0103t2_, rand_200 rand_800 patch_200 patch_800 mute_200 mute_800)
 
+0103t1_%: $(SRC)
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
+
+
+0103t2_%: $(SRC)
+	$(CXX) $(CXXFLAGS) $^ $(FLAGS_$*) -o $@
+
+
 T3_rand:
 	$(CXX) $(CXXFLAGS) class_punisher.cpp T3_rand_0205.cpp $(FLAGS_T3_rand) -o t3rand0205
 #0205 use T3 rand
@@ -93,14 +101,37 @@ T1_200_rep: $(addprefix 0218t1_, rand_200 patch_200 mute_200)
 	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
 
 
-0103t1_%: $(SRC)
-	$(CXX) $(CXXFLAGS) $^ -DTASK1 $(FLAGS_$*) -o $@
+#0427 Flags
+FLAGS_rand_50 =
+FLAGS_patch_50 = -DPATENT
+FLAGS_mute_50 = -DMUTATE
+
+0427_50_rep: 50_rep_t1 50_rep_t2
+
+50_rep_t1: $(addprefix 0427t1_, rand_50 patch_50 mute_50)
+
+50_rep_t2: $(addprefix 0427t2_, rand_50 patch_50 mute_50)
 
 
-0103t2_%: $(SRC)
-	$(CXX) $(CXXFLAGS) $^ $(FLAGS_$*) -o $@
+0427t1_%: $(SRC)
+	$(CXX) $(CXXFLAGS) $^ -DTASK1 -DREPEAT $(FLAGS_$*) -o $@
 
 
+0427t2_%: $(SRC)
+	$(CXX) $(CXXFLAGS) $^ -DREPEAT $(FLAGS_$*) -o $@
+
+#mkdir 0427_50_rep
+#mkdir 0427_50_rep/T1_50_rand  0427_50_rep/T1_50_patch 0427_50_rep/T1_50_mutate
+#mkdir 0427_50_rep/T1_50_rand/M1 0427_50_rep/T1_50_rand/M2 & mkdir 0427_50_rep/T1_50_patch/M1 0427_50_rep/T1_50_patch/M2 &mkdir 0427_50_rep/T1_50_mutate/M1 0427_50_rep/T1_50_mutate/M2
+
+#mkdir 0427_50_rep/T2_50_rand  0427_50_rep/T2_50_patch 0427_50_rep/T2_50_mutate
+#mkdir 0427_50_rep/T2_50_rand/M1 0427_50_rep/T2_50_rand/M2 & mkdir 0427_50_rep/T2_50_patch/M1 0427_50_rep/T2_50_patch/M2 &mkdir 0427_50_rep/T2_50_mutate/M1 0427_50_rep/T2_50_mutate/M2
+#cd 0427_50_rep/T1_50_rand && ./../../0427t1_rand_50
+#cd 0427_50_rep/T1_50_patch && ./../../0427t1_patch_50
+#cd 0427_50_rep/T1_50_mutate && ./../../0427t1_mute_50
+#cd 0427_50_rep/T2_50_rand && ./../../0427t2_rand_50
+#cd 0427_50_rep/T2_50_patch && ./../../0427t2_patch_50
+#cd 0427_50_rep/T2_50_mutate && ./../../0427t2_mute_50
 
 move:
 	@echo "Moving..."
@@ -119,6 +150,13 @@ move2:
 		mv 0224_1200_rep/$(dir)/*mod_01.dat 0224_1200_rep/$(dir)/M2 ; \
 	)
 
+move3:
+	@echo "Moving..."
+
+	$(foreach dir, T1_50_rand T1_50_patch T1_50_mutate T2_50_rand T2_50_patch T2_50_mutate, \
+		mv 0427_50_rep/$(dir)/*mod_00.dat 0427_50_rep/$(dir)/M1 ; \
+		mv 0427_50_rep/$(dir)/*mod_01.dat 0427_50_rep/$(dir)/M2 ; \
+	)
 
 
 generate_pics:
@@ -166,10 +204,36 @@ gen_pics_rep1200:
 	)
 
 
+
+#0427 fuck
+OUT_DIR5 = 0427_50_rep
+gen_pics_rep50:
+	@echo "Generate_pics..."
+	mkdir -p $(FINAL_DIR)
+	$(foreach dir, T1_50_rand  T1_50_patch T1_50_mutate T2_50_rand  T2_50_patch T2_50_mutate, \
+		$(foreach mode, M1 M2, \
+			python3 cat_b.py $(OUT_DIR5)/$(dir)/$(mode) $(FINAL_DIR)/$(subst _,,$(dir))_$(mode)_rep.tex ; \
+		) \
+	)
+
+#0516 About Grid:
+0516_grid_strip:
+	$(CXX) $(CXXFLAGS) -DGRID -DSTRIP one.cpp class_punisher.cpp -o grid_strip
+
+0516_grid_rand:
+	$(CXX) $(CXXFLAGS) -DGRID one.cpp class_punisher.cpp -o grid_rand
+
+
+
 clean:
 	@echo "Cleaning up..."
-	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0218t* 0224t1* 0317t1_*
+	rm -f 0103t*_patch_* 0103t*_rand_* 0103t*_mute_* 0210t* 0218t* 0224t1* 0317t1_* 0427t1_* 0427t2_*
+	rm -f grid_strip grid_rand
 
 clean2:
 	@echo "Cleaning up..."
 	rm -f $(OUT_DIR)/T1_*/M*/* $(OUT_DIR)/T2_*/M*/*
+
+clean3:
+	@echo "Cleaning data..."
+	rm -f $(OUT_DIR5)/T1_*/M*/* $(OUT_DIR5)/T2_*/M*/*

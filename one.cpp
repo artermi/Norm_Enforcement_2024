@@ -24,21 +24,67 @@ int do_once(double r, double b, double g, int mod){
 	file = fopen(file_n, "w");
 	fclose(file);
 
+	bool Grid,Old,Prep,High_D,Patent,Mutate,Strip;
+	Grid = true;
+	Old = true;
+	Prep = true;
+	High_D = true;
+	Patent = true;
+	Mutate = true;
+	Strip = true;
+	int grid_size = 1200;
+	int repeat = 10;
 
-	punPGG gameOBJ(r,b,g,200,mod,true,false,false,false,true);
+#ifndef GRID
+	Grid = false;
+#endif
+#ifndef OLD
+	Old = false;
+#endif
+#ifndef PREP
+	Prep = false;
+#endif
+#ifndef HIGHD
+	High_D = false;
+#endif
+#ifndef PATENT
+	Patent = false;
+#endif
+#ifndef MUTATE
+	Mutate = false;
+#endif
+#ifndef STRIP
+	Strip = false;
+#endif
+
+#ifndef BIGGRID
+	grid_size = 400;
+#endif
+
+#ifndef REPEAT
+	repeat = 1;
+#endif
+
+
+	//1024: Make it for old
+	//                                 Grid,   old, prep, high_D,patent mutate strip,rep
+	punPGG gameOBJ(r,b,g,grid_size,mod,Grid, Old, Prep, High_D,Patent,Mutate,Strip,repeat);
+	printf("grid_size:%d, Grid:%d, Old:%d, Prep:%d, High_D:%d, Patent:%d,Mutate:%d\n",
+		grid_size, Grid,Old,Prep,High_D,Patent,Mutate);
 	//                           grid,old, prep, high ,patched 
-	gameOBJ.game(true,40000,400);
+	gameOBJ.game(true,4000,50);
 	return 0;
 }
 
 
 int main(int argc, char** argv){
 	srand(time(NULL));
-	double r = 2.5;
-	double b = .47;
-	double g = .4;
+	double r = 4;
+	double b = .5;
+	double g = .9;
 
 	do_once(r,b,g,0);
+	do_once(r,b,g,1);
 
 
 
